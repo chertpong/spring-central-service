@@ -1,0 +1,14 @@
+spring:
+  jpa:
+    hibernate:
+      naming:
+        implicit-strategy: org.springframework.boot.orm.jpa.hibernate.SpringImplicitNamingStrategy
+        physical-strategy: org.springframework.boot.orm.jpa.hibernate.SpringPhysicalNamingStrategy
+      ddl-auto: update
+    database: mysql
+    generate-ddl: true
+  datasource:
+    url: jdbc:mysql://localhost/central
+    driver-class-name: com.mysql.jdbc.Driver
+    username: root
+    password:

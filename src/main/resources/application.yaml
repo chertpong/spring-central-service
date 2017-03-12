@@ -1,0 +1,21 @@
+spring:
+  application:
+    name: central
+  profiles:
+    active: dev
+  http:
+    multipart:
+      max-file-size: 1Mb
+      max-request-size: 10Mb
+  devtools:
+    livereload:
+      port: 35730
+storage:
+  location: upload
+security:
+  oauth2:
+    client:
+      use-current-uri: false
+
+server:
+  use-forward-headers: true
