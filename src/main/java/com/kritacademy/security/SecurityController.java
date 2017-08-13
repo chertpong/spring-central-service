@@ -3,6 +3,7 @@ package com.kritacademy.security;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
+import org.springframework.security.oauth2.provider.OAuth2Authentication;
 import org.springframework.security.oauth2.provider.token.TokenStore;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -10,6 +11,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.bind.annotation.ResponseBody;
 
+import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
 
@@ -31,12 +33,19 @@ public class SecurityController {
     }
 
     @GetMapping({ "/user", "/me" })
-    public @ResponseBody Map<String, Object> user(Authentication authentication) {
+    public @ResponseBody Object user(Authentication authentication) {
         Map<String, Object> map = new LinkedHashMap<>();
-        UserDetails userDetails = (UserDetails) authentication.getPrincipal();
-        map.put("username", userDetails.getUsername());
-        map.put("email", userDetails.getUsername());
-        map.put("authorities", userDetails.getAuthorities().toArray());
+        if (authentication instanceof OAuth2Authentication) {
+            OAuth2Authentication oAuth2Authentication = (OAuth2Authentication) authentication;
+            map.put("details", oAuth2Authentication.getUserAuthentication().getDetails());
+            map.put("authorities", oAuth2Authentication.getAuthorities().toArray());
+        } else {
+            UserDetails userDetails = (UserDetails) authentication.getPrincipal();
+            Map<String, String> details = new HashMap<>();
+            details.put("email", userDetails.getUsername());
+            map.put("details", details);
+            map.put("authorities", userDetails.getAuthorities());
+        }
         return map;
     }
 
