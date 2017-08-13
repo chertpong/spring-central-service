@@ -17,15 +17,15 @@ public class AuthorityServiceImplTest {
     private AuthorityRepository authorityRepository;
     @Test
     public void findAll() throws Exception {
-        AuthorityServiceImpl provinceService = new AuthorityServiceImpl(authorityRepository);
-        provinceService.findAll();
+        AuthorityServiceImpl authorityService = new AuthorityServiceImpl(authorityRepository);
+        authorityService.findAll();
         verify(authorityRepository, times(1)).findAll();
     }
 
     @Test
     public void findOneByName() throws Exception {
-        AuthorityServiceImpl provinceService = new AuthorityServiceImpl(authorityRepository);
-        provinceService.findOneByName("ROLE_ADMIN");
+        AuthorityServiceImpl authorityService = new AuthorityServiceImpl(authorityRepository);
+        authorityService.findOneByName("ROLE_ADMIN");
         verify(authorityRepository, times(1)).findOneByName("ROLE_ADMIN");
     }
 
@@ -38,22 +38,22 @@ public class AuthorityServiceImplTest {
 
     @Test
     public void create() throws Exception {
-        AuthorityServiceImpl provinceService = new AuthorityServiceImpl(authorityRepository);
-        provinceService.create(new Authority());
+        AuthorityServiceImpl authorityService = new AuthorityServiceImpl(authorityRepository);
+        authorityService.create(new Authority());
         verify(authorityRepository, times(1)).save(new Authority());
     }
 
     @Test
     public void update() throws Exception {
-        AuthorityServiceImpl provinceService = new AuthorityServiceImpl(authorityRepository);
-        provinceService.update(new Authority());
+        AuthorityServiceImpl authorityService = new AuthorityServiceImpl(authorityRepository);
+        authorityService.update(new Authority());
         verify(authorityRepository, times(1)).save(new Authority());
     }
 
     @Test
     public void delete() throws Exception {
-        AuthorityServiceImpl provinceService = new AuthorityServiceImpl(authorityRepository);
-        provinceService.delete(1);
+        AuthorityServiceImpl authorityService = new AuthorityServiceImpl(authorityRepository);
+        authorityService.delete(1);
         verify(authorityRepository, times(1)).delete(1);
     }
 
