@@ -12,6 +12,7 @@ import org.springframework.boot.CommandLineRunner;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.context.annotation.Bean;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.GetMapping;
 
@@ -23,6 +24,8 @@ public class Application {
     UserService userService;
     @Autowired
     AuthorityService authorityService;
+    @Autowired
+	PasswordEncoder passwordEncoder;
 
 	public static void main(String[] args) {
 		SpringApplication.run(Application.class, args);
@@ -48,7 +51,7 @@ public class Application {
 			user.setFirstName("user");
 			user.setEmail("user01@kritacademy.com");
 			user.getAuthorities().add(roleUser);
-			user.setPassword("test");
+			user.setPassword(passwordEncoder.encode("test"));
 			user = userService.create(user);
 			logger.info("[+] create user: ", user);
 
@@ -57,7 +60,7 @@ public class Application {
             user2.setEmail("user02@kritacademy.com");
             user2.getAuthorities().add(roleUser);
             user2.getAuthorities().add(roleAdmin);
-            user2.setPassword("test");
+            user2.setPassword(passwordEncoder.encode("test"));
             user2 = userService.create(user2);
             logger.info("[+] create user: ", user2);
 
@@ -66,7 +69,7 @@ public class Application {
 			admin.setEmail("admin@kritacademy.com");
 			admin.getAuthorities().add(roleUser);
 			admin.getAuthorities().add(roleAdmin);
-			admin.setPassword("admin");
+			admin.setPassword(passwordEncoder.encode("admin"));
 			admin = userService.create(admin);
 			logger.info("[+] create user: ", admin);
 		};

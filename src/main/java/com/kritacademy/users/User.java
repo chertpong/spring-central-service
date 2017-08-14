@@ -1,6 +1,5 @@
 package com.kritacademy.users;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.fasterxml.jackson.annotation.JsonProperty;
 import com.kritacademy.authorities.Authority;
 import lombok.Getter;
@@ -10,6 +9,7 @@ import org.hibernate.validator.constraints.Email;
 import javax.persistence.*;
 import javax.validation.constraints.NotNull;
 import javax.validation.constraints.Size;
+import java.math.BigInteger;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -39,6 +39,9 @@ public class User {
     @JsonProperty(access = JsonProperty.Access.WRITE_ONLY)
     @Column(name = "password", length = 100)
     private String password;
+
+    @Column(name = "facebook_id", unique = true)
+    private BigInteger facebookId;
 
     @ManyToMany(fetch = FetchType.EAGER)
     @JoinTable(name = "users_authorites",

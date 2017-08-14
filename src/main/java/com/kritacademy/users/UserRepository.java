@@ -6,6 +6,7 @@ import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.data.jpa.repository.Query;
 import org.springframework.stereotype.Repository;
 
+import java.math.BigInteger;
 import java.util.Optional;
 
 /**
@@ -17,4 +18,6 @@ public interface UserRepository extends JpaRepository<User, Integer> {
     @Query(value = "select distinct users from User users left join fetch users.authorities",
             countQuery = "select count(users) from User users")
     Page<User> findAllWithAuthorities(Pageable pageable);
+
+    Optional<User> findOneByFacebookId(BigInteger id);
 }

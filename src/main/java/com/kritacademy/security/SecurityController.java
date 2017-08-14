@@ -1,5 +1,7 @@
 package com.kritacademy.security;
 
+import com.kritacademy.users.User;
+import com.kritacademy.users.UserService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.Authentication;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -14,6 +16,7 @@ import org.springframework.web.bind.annotation.ResponseBody;
 import java.util.HashMap;
 import java.util.LinkedHashMap;
 import java.util.Map;
+import java.util.Optional;
 
 /**
  * Created by chertpong.github.io on 22/06/2016.
@@ -21,10 +24,12 @@ import java.util.Map;
 @Controller
 public class SecurityController {
     private final TokenStore tokenStore;
+    private final UserService userService;
 
     @Autowired
-    public SecurityController(TokenStore tokenStore) {
+    public SecurityController(TokenStore tokenStore, UserService userService) {
         this.tokenStore = tokenStore;
+        this.userService = userService;
     }
 
     @GetMapping("/login")
@@ -43,6 +48,15 @@ public class SecurityController {
             UserDetails userDetails = (UserDetails) authentication.getPrincipal();
             Map<String, String> details = new HashMap<>();
             details.put("email", userDetails.getUsername());
+            Optional<User> user = userService.findOneByEmail(userDetails.getUsername());
+            if (user.isPresent()) {
+                // if user has first and last name, then concat, else show only first name
+                String name = user.get().getFirstName();
+                if (user.get().getLastName() != null) {
+                    name += (" " + user.get().getLastName());
+                }
+                details.put("name", name);
+            }
             map.put("details", details);
             map.put("authorities", userDetails.getAuthorities());
         }

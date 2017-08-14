@@ -3,6 +3,7 @@ package com.kritacademy.users;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
@@ -13,6 +14,7 @@ public interface UserService {
     List<User> findAll();
     Page<User> findAllWithAuthorities(Pageable pageable);
     Optional<User> findOneByEmail(String email);
+    Optional<User> findOneByFacebookId(BigInteger id);
     User findOneById(Integer id);
     User create(User user);
     User update(User user);

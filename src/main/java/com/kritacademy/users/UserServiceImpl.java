@@ -9,6 +9,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
+import java.math.BigInteger;
 import java.util.List;
 import java.util.Optional;
 
@@ -40,6 +41,11 @@ public class UserServiceImpl implements UserService{
     @Override
     public Optional<User> findOneByEmail(String email) {
         return userRepository.findOneByEmail(email);
+    }
+
+    @Override
+    public Optional<User> findOneByFacebookId(BigInteger id) {
+        return userRepository.findOneByFacebookId(id);
     }
 
     @Override

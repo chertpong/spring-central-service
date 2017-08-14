@@ -2,14 +2,13 @@ package com.kritacademy.users;
 
 import com.kritacademy.authorities.Authority;
 import com.kritacademy.authorities.AuthorityService;
-import com.kritacademy.exceptions.BadRequestException;
 import com.kritacademy.exceptions.DataAlreadyExists;
 import com.kritacademy.exceptions.DataNotFoundException;
 import com.kritacademy.security.SecurityConstant;
 import com.kritacademy.users.dto.UpdateUserInfo;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.security.access.annotation.Secured;
 import org.springframework.security.access.prepost.PreAuthorize;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.web.bind.annotation.*;
 
 import javax.validation.Valid;
@@ -20,11 +19,13 @@ import java.util.*;
  */
 @RestController
 public class UserController {
+    private final PasswordEncoder passwordEncoder;
     private final UserService userService;
     private final AuthorityService authorityService;
 
     @Autowired
-    public UserController(UserService userService, AuthorityService authorityService) {
+    public UserController(PasswordEncoder passwordEncoder, UserService userService, AuthorityService authorityService) {
+        this.passwordEncoder = passwordEncoder;
         this.userService = userService;
         this.authorityService = authorityService;
     }
@@ -56,8 +57,11 @@ public class UserController {
             throw new DataAlreadyExists("User email " + user.getEmail() + " is already existed");
         }
         if(userAuthority.isPresent()){
+            // add authority
             user.getAuthorities().clear();
             user.getAuthorities().add(userAuthority.get());
+            // encode password
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
             return userService.create(user);
         }
         else {
